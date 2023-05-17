@@ -11,8 +11,8 @@ provider:
   region: us-east-1
 
 functions:
-  hello:
-    handler: handler.hello
+  handleScheduleFeed:
+    handler: src/functions/scheduleFeedHandler/handler.handleScheduleFeed
     events:
       - eventBridge:
           schedule: rate(1 minute)

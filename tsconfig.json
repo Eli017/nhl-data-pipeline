@@ -9,5 +9,8 @@
       "moduleResolution": "node",
       "lib": ["es2015"],
       "rootDir": "./"
-    }
+    },
+    "include": [
+      "src/**/*.ts"
+    ]
   }
