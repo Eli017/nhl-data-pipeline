@@ -1,4 +1,4 @@
-service: serverless-example
+service: nhl-data-pipeline
 frameworkVersion: '3'
 
 plugins:
@@ -13,3 +13,6 @@ provider:
 functions:
   hello:
     handler: handler.hello
+    events:
+      - eventBridge:
+          schedule: rate(1 minute)
