@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { APIGatewayProxyResult, EventBridgeEvent } from "aws-lambda";
 import * as AWS from 'aws-sdk';
-import ScheduleFeed from '../../../types/ScheduleFeed';
+import ScheduleFeed from '../../types/ScheduleFeed';
 import { EventBridgeDetailType, EventBridgeEventSource } from "aws-sdk/clients/pipes";
 
 const sqs = new AWS.SQS();
