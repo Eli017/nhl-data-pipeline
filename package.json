@@ -5,7 +5,8 @@
     "build": "rm -rf ./build && yarn tsc",
     "invoke:local": "serverless invoke local -f",
     "invoke:cloud": "serverless invoke -f",
-    "deploy": "yarn build && serverless deploy"
+    "deploy": "yarn build && serverless deploy",
+    "remove": "serverless remove"
   },
   "dependencies": {
     "aws-sdk": "^2.1376.0",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.115",
     "@types/node": "^11.13.0",
+    "serverless-mysql": "^1.5.5",
     "serverless-offline": "^12.0.4",
     "serverless-plugin-typescript": "^2.1.4",
     "typescript": "^5.0.4"
