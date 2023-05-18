@@ -9,7 +9,7 @@ const queueUrl = process.env.QUEUE_URL;
 
 export const handleScheduleFeed = async (event: EventBridgeEvent<EventBridgeDetailType, EventBridgeEventSource>): Promise<APIGatewayProxyResult> => {
 
-    await axios.get("https://statsapi.web.nhl.com/api/v1/schedule?teamId=30&startDate=2023-04-28&endDate=2023-05-01")
+    const response = await axios.get("https://statsapi.web.nhl.com/api/v1/schedule?teamId=30&startDate=2023-04-28&endDate=2023-05-01")
         .then(async (response: AxiosResponse) => {
             const scheduleFeed: ScheduleFeed = response.data;
             try {
@@ -19,21 +19,34 @@ export const handleScheduleFeed = async (event: EventBridgeEvent<EventBridgeDeta
                 };
 
                 const result = await sqs.sendMessage(params).promise();
+                const response: APIGatewayProxyResult = {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        message: 'SQS Message sent!',
+                    }),
+                };
+                return response;
             } catch (error) {
                 console.error('Failed to send message to SQS: ', error);
+                const response: APIGatewayProxyResult = {
+                    statusCode: 500,
+                    body: JSON.stringify({
+                        message: 'Failed to send message',
+                    }),
+                };
+                return response;
             }
         })
         .catch((error: any) => {
             console.error('Error: ', error);
+            const response: APIGatewayProxyResult = {
+                statusCode: 500,
+                body: JSON.stringify({
+                    message: 'Failed to send message',
+                    input: event,
+                }),
+            };
+            return response;
         });
-
-    const response: APIGatewayProxyResult = {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: 'Go Serverless v3.0! Your function executed successfully!',
-            input: event,
-        }),
-    };
-
-    return response;
+        return response;
 };

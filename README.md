@@ -1,40 +1,57 @@
 <!--
-title: 'AWS NodeJS Example'
-description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.'
+title: 'NHL Data Pipeline'
+description: 'This project is an ingestion pipeline of data from the NHL. This utilizes the serverless framework
+and AWS to parse game data into stored, accessible data. The AWS services that are used are CloudFormation, 
+Lambda, SQS, RDS, and EventBridge.'
 layout: Doc
 framework: v3
 platform: AWS
 language: nodeJS
 priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
+authorLink: 'https://github.com/Eli017'
+authorName: 'Eli Sokeland'
+authorAvatar: 'https://github.com/account'
 -->
 
 
-# Serverless Framework AWS NodeJS Example
+# NHL Data Pipeline
 
-This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
+This project is an ingestion pipeline of data from the NHL. This utilizes the serverless framework
+and AWS to parse game data into stored, accessible data. The AWS services that are used are CloudFormation, 
+Lambda, SQS, RDS, and EventBridge.
+
+## Installation
+
+### Dependencies
+
+- Ensure that you have the latest NodeJS installed (version 18.16.0 as of publishing).
+  - Here is the download link for NodeJS: https://nodejs.org/en/download.
+- In order to deploy to AWS, please make sure you are signed into the AWS v2 CLI.
+  - Here is a link to get started: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html.
+- This project was built with the Yarn package manager, please ensure that this is installed.
+  - Here is the installation link for Yarn: https://yarnpkg.com/getting-started/install.
+
+Before usage, ensure that you have run `yarn` to install all dependencies before usage.
 
 ## Usage
 
 ### Deployment
 
-In order to deploy the example, you need to run the following command:
+In order to deploy the project, you need to run the following command:
 
 ```
-$ serverless deploy
+$ yarn deploy
 ```
 
 After running deploy, you should see output similar to:
 
 ```bash
-Deploying aws-node-project to stage dev (us-east-1)
+Deploying nhl-data-pipeline to stage dev (us-east-1)
 
-✔ Service deployed to stack aws-node-project-dev (112s)
+✔ Service deployed to stack nhl-data-pipeline-dev (112s)
 
 functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
+  hello: nhl-data-pipeline-dev-hello (1.5 kB)
 ```
 
 ### Invocation
@@ -42,7 +59,7 @@ functions:
 After successful deployment, you can invoke the deployed function by using the following command:
 
 ```bash
-serverless invoke --function hello
+serverless invoke --function handleScheduleFeed
 ```
 
 Which should result in response similar to the following:
@@ -50,7 +67,7 @@ Which should result in response similar to the following:
 ```json
 {
     "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
+    "body": "{\"message\":\"SQS Message sent!\"}"
 }
 ```
 
@@ -62,11 +79,10 @@ You can invoke your function locally by using the following command:
 serverless invoke local --function hello
 ```
 
-Which should result in response similar to the following:
+The response will be different, due to the project's dependency on AWS services:
 
 ```
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
+Could not resolve "QUEUE_URL" environment variable: Unsupported environment variable format: {
+  'Fn::Sub': 'https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/schedule-to-game-logic-queue'
 }
 ```
