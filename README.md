@@ -33,6 +33,21 @@ Lambda, SQS, RDS, and EventBridge.
 
 Before usage, ensure that you have run `yarn` to install all dependencies before usage.
 
+### Database
+
+Serverless doesn't support table definitions out of the box. Luckily, there is script included
+in this project that contains the necessary SQL to generate the tables and connections. To
+execute this statement, please do the following.
+
+1. Ensure that MySQL and MySQL Workbench are set up on your local machine.
+2. Run through the deployment steps listed below to instantiate the RDS database.
+3. Add the 'MySQL/Aurora' security group for your IP address to allow remote connections.
+4. Connect to the RDS instance using the MySQL Workbench.
+5. Under the 'Database' tab, click on 'Forward Engineer.'
+6. Using the file included in this project, execute this script into the remotely connected database.
+
+If everything went correctly, there should be a schema on the left Workbench panel with the newly added tables.
+
 ## Usage
 
 ### Deployment
