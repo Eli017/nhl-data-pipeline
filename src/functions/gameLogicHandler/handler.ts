@@ -1,19 +1,23 @@
 import * as AWS from 'aws-sdk';
 import ScheduleFeed from '../../types/ScheduleFeed';
 
+const sqs = new AWS.SQS();
+
 export const gameLogic = async (event, context, callback) => {
   try {
     for (const record of event.Records) {
-      const link = JSON.parse(record.body) as ScheduleFeed;
+        const schedule = JSON.parse(record.body) as ScheduleFeed;
 
-      // TODO: Add your custom logic here to respond to the message
+        for (const game of schedule.dates[0].games) {
+            if (game.status.abstractGameState === 'Live') {
+            }
+        }
 
-    //   // Delete the processed message from the SQS queue
-    //   await sqs.deleteMessage({
-    //     QueueUrl: record.eventSourceARN,
-    //     ReceiptHandle: record.receiptHandle
-    //   }).promise();
-    //   console.log('Deleted message:', message);
+        // Delete the processed message from the SQS queue
+        await sqs.deleteMessage({
+            QueueUrl: record.eventSourceARN,
+            ReceiptHandle: record.receiptHandle
+        }).promise();
     }
   } catch (error) {
   }
