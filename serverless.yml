@@ -53,3 +53,9 @@ functions:
       onSuccess:
         type: sqs
         arn: !GetAtt [ScheduleToGameLogicQueue, Arn]
+  gameLogic:
+    handler: src/functions/gameLogicHandler/handler.gameLogic
+    events:
+      - sqs:
+          arn: !GetAtt [ScheduleToGameLogicQueue, Arn]
+          batchSize: 1
