@@ -9,7 +9,7 @@ const queueUrl = process.env.QUEUE_URL;
 
 export const handleScheduleFeed = async (event: EventBridgeEvent<EventBridgeDetailType, EventBridgeEventSource>): Promise<APIGatewayProxyResult> => {
 
-    const response = await axios.get("https://statsapi.web.nhl.com/api/v1/schedule?teamId=30&startDate=2023-04-28&endDate=2023-05-01")
+    const response = await axios.get("https://statsapi.web.nhl.com/api/v1/schedule")
         .then(async (response: AxiosResponse) => {
             const scheduleFeed: ScheduleFeed = response.data;
             try {
@@ -18,7 +18,7 @@ export const handleScheduleFeed = async (event: EventBridgeEvent<EventBridgeDeta
                     QueueUrl: queueUrl ?? ''
                 };
 
-                const result = await sqs.sendMessage(params).promise();
+                await sqs.sendMessage(params).promise();
                 const response: APIGatewayProxyResult = {
                     statusCode: 200,
                     body: JSON.stringify({

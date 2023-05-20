@@ -19,6 +19,7 @@ provider:
             - rds:DescribeDBInstances
           Resource:
             - Fn::GetAtt: [ScheduleToGameLogicQueue, Arn]
+            - Fn::GetAtt: [GameLogicToDatabaseSaveQueue, Arn]
 
 resources:
   Resources:
@@ -26,6 +27,10 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: schedule-to-game-logic-queue
+    GameLogicToDatabaseSaveQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: game-logic-to-database-save-queue
 
     NHL:
       Type: AWS::RDS::DBInstance
@@ -45,7 +50,7 @@ functions:
   handleScheduleFeed:
     handler: src/functions/scheduleFeedHandler/handler.handleScheduleFeed
     environment:
-      QUEUE_URL: !Sub "https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/schedule-to-game-logic-queue"
+      QUEUE_URL: !GetAtt [ScheduleToGameLogicQueue, QueueUrl]
     events:
       - eventBridge:
           schedule: rate(1 minute)
@@ -55,7 +60,14 @@ functions:
         arn: !GetAtt [ScheduleToGameLogicQueue, Arn]
   gameLogic:
     handler: src/functions/gameLogicHandler/handler.gameLogic
+    environment:
+      QUEUE_URL: !GetAtt [GameLogicToDatabaseSaveQueue, QueueUrl]
     events:
       - sqs:
           arn: !GetAtt [ScheduleToGameLogicQueue, Arn]
           batchSize: 1
+    destinations:
+      onSuccess:
+        type: sqs
+        arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
+
