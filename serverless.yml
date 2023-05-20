@@ -15,8 +15,7 @@ provider:
         - Effect: Allow
           Action:
             - sqs:*
-            - rds:CreateDBInstance
-            - rds:DescribeDBInstances
+            - rds:*
           Resource:
             - Fn::GetAtt: [ScheduleToGameLogicQueue, Arn]
             - Fn::GetAtt: [GameLogicToDatabaseSaveQueue, Arn]
@@ -70,4 +69,13 @@ functions:
       onSuccess:
         type: sqs
         arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
+  databaseGame:
+    handler: src/functions/databaseGameHandler/handler.databaseGame
+    environment:
+      QUEUE_URL: !GetAtt [GameLogicToDatabaseSaveQueue, QueueUrl]
+      RDS_URL: !GetAtt [NHL, Endpoint.Address]
+    events:
+      - sqs:
+          arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
+          batchSize: 1
 
