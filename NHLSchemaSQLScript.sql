@@ -31,18 +31,18 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `NHL`.`game` (
   `game_pk` INT NOT NULL AUTO_INCREMENT,
   `home_team_pk` INT NOT NULL,
-  `home_team_pk1` INT NOT NULL,
+  `away_team_pk` INT NOT NULL,
   `penalty_minutes` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`game_pk`, `home_team_pk`),
   INDEX `fk_game_team1_idx` (`home_team_pk` ASC),
-  INDEX `fk_game_team2_idx` (`home_team_pk1` ASC),
+  INDEX `fk_game_team2_idx` (`away_team_pk` ASC),
   CONSTRAINT `fk_game_team1`
     FOREIGN KEY (`home_team_pk`)
     REFERENCES `NHL`.`team` (`team_pk`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_game_team2`
-    FOREIGN KEY (`home_team_pk1`)
+    FOREIGN KEY (`away_team_pk`)
     REFERENCES `NHL`.`team` (`team_pk`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

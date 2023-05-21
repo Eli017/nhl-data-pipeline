@@ -73,9 +73,26 @@ functions:
     handler: src/functions/databaseGameHandler/handler.databaseGame
     environment:
       QUEUE_URL: !GetAtt [GameLogicToDatabaseSaveQueue, QueueUrl]
-      RDS_URL: !GetAtt [NHL, Endpoint.Address]
     events:
       - sqs:
           arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
           batchSize: 1
+  nhlAPI:
+    handler: src/nhlAPI/game.handler
+    events:
+      - http:
+          path: game
+          method: get
+          cors: true
+      - http:
+          path: game/{id}
+          method: get
+          cors: true
 
+custom:
+  RDS_URL: !GetAtt [NHL, Endpoint.Address]
+  webpack:
+    webpackConfig: 'webpack.config.ts' # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: 'yarn' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore
