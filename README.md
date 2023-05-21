@@ -101,3 +101,13 @@ Could not resolve "QUEUE_URL" environment variable: Unsupported environment vari
   'Fn::Sub': 'https://sqs.${AWS::Region}.amazonaws.com/${AWS::AccountId}/schedule-to-game-logic-queue'
 }
 ```
+
+### Resources
+
+#### Database
+
+Here is the following database structure that this program is based off of.
+Please note that this does not have all of the data that the URL sources contain.
+This is meant to be a barebones application that filters out the information into its essentials.
+
+![plot](./resources/database-structure.png)

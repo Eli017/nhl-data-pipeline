@@ -3,6 +3,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf ./build && yarn tsc",
+    "start": "serverless offline",
     "test": "jest",
     "invoke:local": "serverless invoke local -f",
     "invoke:cloud": "serverless invoke -f",
