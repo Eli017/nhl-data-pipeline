@@ -109,12 +109,47 @@ app.get('/players/', async (req, res) => {
 app.get('/players/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const query = `SELECT * FROM player WHERE id=${id}`;
+    const query = `SELECT * FROM player WHERE player_pk=${id}`;
     const [rows] = await pool.query(query);
     const player = rows[0];
     const response = {
       data: player,
       message: `Player successfully retrieved.`,
+    };
+    res.status(200).send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle goals GET route for all goals
+app.get('/goals/', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM goal';
+    const [rows] = await pool.query(query);
+    const goals = [...rows];
+    const response = {
+      data: goals,
+      message: 'All goals successfully retrieved.',
+    };
+    res.send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle goal GET route for specific goal
+app.get('/goals/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `SELECT * FROM goal WHERE goal_pk=${id}`;
+    const [rows] = await pool.query(query);
+    const goal = rows[0];
+    const response = {
+      data: goal,
+      message: `Goal successfully retrieved.`,
     };
     res.status(200).send(response);
   } catch (err) {
