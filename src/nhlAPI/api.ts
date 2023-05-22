@@ -39,12 +39,47 @@ app.get('/games/', async (req, res) => {
 app.get('/games/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const query = `SELECT * FROM game WHERE id=${id}`;
+    const query = `SELECT * FROM game WHERE game_pk=${id}`;
     const [rows] = await pool.query(query);
     const game = rows[0];
     const response = {
       data: game,
-      message: `Game ${game.gamePk} successfully retrieved.`,
+      message: `Game successfully retrieved.`,
+    };
+    res.status(200).send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle player GET route for all players
+app.get('/players/', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM player';
+    const [rows] = await pool.query(query);
+    const players = [...rows];
+    const response = {
+      data: players,
+      message: 'All players successfully retrieved.',
+    };
+    res.send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle player GET route for specific player
+app.get('/players/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `SELECT * FROM player WHERE id=${id}`;
+    const [rows] = await pool.query(query);
+    const player = rows[0];
+    const response = {
+      data: player,
+      message: `Player successfully retrieved.`,
     };
     res.status(200).send(response);
   } catch (err) {

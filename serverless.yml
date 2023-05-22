@@ -103,11 +103,11 @@ functions:
           method: get
           cors: true
       - http:
-          path: team
+          path: players
           method: get
           cors: true
       - http:
-          path: team/{id}
+          path: players/{id}
           method: get
           cors: true
 
