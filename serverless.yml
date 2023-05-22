@@ -110,6 +110,14 @@ functions:
           path: players/{id}
           method: get
           cors: true
+      - http:
+          path: teams
+          method: get
+          cors: true
+      - http:
+          path: teams/{id}
+          method: get
+          cors: true
 
 custom:
   RDS_URL: !GetAtt [NHL, Endpoint.Address]

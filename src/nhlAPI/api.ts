@@ -53,6 +53,41 @@ app.get('/games/:id', async (req, res) => {
   }
 });
 
+// Handle team GET route for all teams
+app.get('/teams/', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM team';
+    const [rows] = await pool.query(query);
+    const teams = [...rows];
+    const response = {
+      data: teams,
+      message: 'All teams successfully retrieved.',
+    };
+    res.send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle team GET route for specific team
+app.get('/teams/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `SELECT * FROM game WHERE team_pk=${id}`;
+    const [rows] = await pool.query(query);
+    const team = rows[0];
+    const response = {
+      data: team,
+      message: `Team successfully retrieved.`,
+    };
+    res.status(200).send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
 // Handle player GET route for all players
 app.get('/players/', async (req, res) => {
   try {
