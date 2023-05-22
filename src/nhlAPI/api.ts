@@ -158,6 +158,41 @@ app.get('/goals/:id', async (req, res) => {
   }
 });
 
+// Handle hit GET route for all hits
+app.get('/hits/', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM hit';
+    const [rows] = await pool.query(query);
+    const hits = [...rows];
+    const response = {
+      data: hits,
+      message: 'All hits successfully retrieved.',
+    };
+    res.send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
+// Handle hit GET route for specific hit
+app.get('/hits/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `SELECT * FROM hit WHERE hit_pk=${id}`;
+    const [rows] = await pool.query(query);
+    const hit = rows[0];
+    const response = {
+      data: hit,
+      message: `Hit successfully retrieved.`,
+    };
+    res.status(200).send(response);
+  } catch (err) {
+    const response = { data: null, message: err.message };
+    res.send(response);
+  }
+});
+
 // Handle in-valid route
 app.all('*', function(req, res) {
   const response = { data: null, message: 'Route not found!!' };

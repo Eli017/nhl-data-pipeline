@@ -135,6 +135,14 @@ functions:
           path: goals/{id}
           method: get
           cors: true
+      - http:
+          path: hits
+          method: get
+          cors: true
+      - http:
+          path: hits/{id}
+          method: get
+          cors: true
 
 
 custom:
