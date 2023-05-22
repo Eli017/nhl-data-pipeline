@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Create a connection pool
 const pool = mysql.createPool({
-  host: 'nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com',
-  database: 'NHL',
-  user: 'admin',
-  password: 'password',
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
 });
 
 // Handle game GET route for all games

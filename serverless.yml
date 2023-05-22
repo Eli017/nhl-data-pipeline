@@ -87,12 +87,21 @@ functions:
     handler: src/functions/databaseGameHandler/handler.databaseGame
     environment:
       QUEUE_URL: !GetAtt [GameLogicToDatabaseSaveQueue, QueueUrl]
+      HOST: nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com
+      DATABASE: NHL
+      USER: admin
+      PASSWORD: password
     events:
       - sqs:
           arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
           batchSize: 1
   nhlAPI:
     handler: src/nhlAPI/api.handler
+    environment:
+      HOST: nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com
+      DATABASE: NHL
+      USER: admin
+      PASSWORD: password
     events:
       - http:
           path: games

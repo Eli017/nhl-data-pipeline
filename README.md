@@ -33,6 +33,18 @@ Lambda, SQS, RDS, and EventBridge.
 
 Before usage, ensure that you have run `yarn` to install all dependencies before usage.
 
+### Code Changes
+
+While it is ideal to hide away environment secrets using a `.env` file, this project currently has some variables
+out in the open due to compilation and clarity. In order to use this effectly, please change the following items
+in the `serverless.yml` file:
+
+1. `securityGroupIds` and `subnetIds` need to be changed to your personal default VPC to secure the solution entirely.
+2. The API Gateway and Execute API ID and ARNs (respectively) need replaced under the `Resource` tag in the `iam` section.
+    1. Feel free to change the iam permissions of the actions as well, it's best to only give the required permissions.
+3. Under the `NHL` RDS instance, please replace the `MasterUsername` and the `MasterUserPassword`.
+4. Lastly, under the `databaseGame` and `nhlAPI` lambdas, please replace the database credentials that correspond with the `NHL` configuration mentioned above.
+
 ### Database
 
 Serverless doesn't support table definitions out of the box. Luckily, there is script included

@@ -4,11 +4,10 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 	
 const mysql = require('serverless-mysql')({
     config: {
-      host     : 'nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com',
-      port     : 3306,
-      database : 'NHL',
-      user     : 'admin',
-      password : 'password'
+        host: process.env.HOST,
+        database: process.env.DATABASE,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
     }
 });
 
