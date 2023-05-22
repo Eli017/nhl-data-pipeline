@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Create a connection pool
 const pool = mysql.createPool({
-  host: process.env.RDS_URL,
+  host: 'nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com',
   database: 'NHL',
   user: 'admin',
   password: 'password',
@@ -36,7 +36,7 @@ app.get('/games/', async (req, res) => {
 });
 
 // Handle game GET route for specific game
-app.get('/game/:id', async (req, res) => {
+app.get('/games/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const query = `SELECT * FROM game WHERE id=${id}`;

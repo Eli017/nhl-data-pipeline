@@ -42,16 +42,10 @@ export const gameLogic = async (event, context, callback): Promise<APIGatewayPro
                         }),
                         };
                         return response;
-                    }
-                }
-            }
-        }
-
-        // Delete the processed message from the SQS queue
-        await sqs.deleteMessage({
-            QueueUrl: record.eventSourceARN,
-            ReceiptHandle: record.receiptHandle
-        }).promise();
+                    };
+                };
+            };
+        };
     };
 
     const response: APIGatewayProxyResult = {

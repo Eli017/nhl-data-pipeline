@@ -9,6 +9,16 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-1
+  vpc:
+    securityGroupIds:
+      - sg-0eb41fb6bf60a7bcc # Replace with your actual security group ID
+    subnetIds:
+      - subnet-0820b6cff5d2a2a67 # Replace with your actual subnet ID
+      - subnet-006b11302045e1a7e
+      - subnet-00d91b1674b12e42c
+      - subnet-0113ec573bf47b763
+      - subnet-0c3d532a3c689114e
+      - subnet-0f8a67cd8c0efa235
   iam:
     role:
       statements:
@@ -16,9 +26,13 @@ provider:
           Action:
             - sqs:*
             - rds:*
+            - apigateway:*
           Resource:
             - Fn::GetAtt: [ScheduleToGameLogicQueue, Arn]
             - Fn::GetAtt: [GameLogicToDatabaseSaveQueue, Arn]
+            - "arn:aws:apigateway:*::/restapis/x90b92tqe0/*" # Replace with the API ID
+            - "arn:aws:execute-api:us-east-1:789721153475:x90b92tqe0/*" # Replace with your API Gateway ARN
+
 
 resources:
   Resources:
@@ -78,21 +92,24 @@ functions:
           arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
           batchSize: 1
   nhlAPI:
-    handler: src/nhlAPI/game.handler
+    handler: src/nhlAPI/api.handler
     events:
       - http:
-          path: game
+          path: games
           method: get
           cors: true
       - http:
-          path: game/{id}
+          path: games/{id}
+          method: get
+          cors: true
+      - http:
+          path: team
+          method: get
+          cors: true
+      - http:
+          path: team/{id}
           method: get
           cors: true
 
 custom:
   RDS_URL: !GetAtt [NHL, Endpoint.Address]
-  webpack:
-    webpackConfig: 'webpack.config.ts' # Name of webpack configuration file
-    includeModules: false # Node modules configuration for packaging
-    packager: 'yarn' # Packager that will be used to package your external modules
-    excludeFiles: src/**/*.test.ts # Provide a glob for files to ignore
