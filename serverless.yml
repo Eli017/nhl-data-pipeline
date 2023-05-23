@@ -95,6 +95,18 @@ functions:
       - sqs:
           arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
           batchSize: 1
+  databasePlayer:
+    handler: src/functions/databasePlayerHandler/handler.databasePlayer
+    environment:
+      QUEUE_URL: !GetAtt [GameLogicToDatabaseSaveQueue, QueueUrl]
+      HOST: nhl.cqvu4vue0d4v.us-east-1.rds.amazonaws.com
+      DATABASE: NHL
+      USER: admin
+      PASSWORD: password
+    events:
+      - sqs:
+          arn: !GetAtt [GameLogicToDatabaseSaveQueue, Arn]
+          batchSize: 1
   databaseGame:
     handler: src/functions/databaseGameHandler/handler.databaseGame
     environment:

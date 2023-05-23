@@ -1,4 +1,3 @@
-import * as AWS from 'aws-sdk';
 import Game from '../../types/Game';
 import { APIGatewayProxyResult } from 'aws-lambda';
 	
