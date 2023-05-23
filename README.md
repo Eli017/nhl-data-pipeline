@@ -122,4 +122,32 @@ Here is the following database structure that this program is based off of.
 Please note that this does not have all of the data that the URL sources contain.
 This is meant to be a barebones application that filters out the information into its essentials.
 
-![plot](./resources/database-structure.png)
+![database-design-diagram](./resources/database-structure.png)
+
+#### AWS Architecture
+
+Here is the following AWS architecture that this solution is based off of.
+Please note that this is only an abstract, as specific details such as VPC configurations,
+Cloudformation settings, and iAM role permissions are not specified.
+
+![aws-architecture-design](./resources/aws-architecture.png)
+
+
+### Future Work
+
+While this application does complete the tasks mentioned by the challenge (aggregation and storage
+of NHL data per game), this lacks some security features and architecture improvements.
+
+1. First, the use of hard-coded values should never be shown in public, so there should be a focus on adding environment
+variables.
+2. The iAM user specified by the `serverless.yml` file has too many permissions, this should be slimmed down.
+3. There should be a Redis Cache, as this would improve unnecessary networking calls.
+4. The database should have hits focused on the team, not the player.
+5. The SQL statements do work, but I think there could be improvement in how the initial insert could be handled.
+    1. This could be solved by breaking down the lambdas even more.
+    2. The lambdas should be more sequential, as storing games requires team IDs to look for. If the team lambda isn't
+       finished/the team isn't in the database, this could lead to a failure.
+6. The parsing of information from the NHL API is vast and requires multiple calls. Knowing when to make these calls
+   and how to slim them down into usable information for the API would be better.
+7. Lastly, the API created uses REST and CRUD operations. While this is fine, GraphQL and AppSync could've been a better
+   option. I am unsure if AppSync requires a DynamoDB storage instead of an RDS database though.
